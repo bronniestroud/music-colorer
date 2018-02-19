@@ -1,0 +1,258 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to MusicColorer’s documentation! &#8212; MusicColorer 1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-musiccolorer-s-documentation">
+<h1>Welcome to MusicColorer&#8217;s documentation!<a class="headerlink" href="#welcome-to-musiccolorer-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-musicColorer"></span><dl class="class">
+<dt id="musicColorer.MusicColorer">
+<em class="property">class </em><code class="descclassname">musicColorer.</code><code class="descname">MusicColorer</code><span class="sig-paren">(</span><em>argv: list</em><span class="sig-paren">)</span><a class="headerlink" href="#musicColorer.MusicColorer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is initialized with a list of colors and a music21 Score object. It analyzes each measure with the
+floatingKey method, then colors the noteheads, matching colors to scale degrees relative to the prevailing key.
+The recolored Score is returned.</p>
+<dl class="docutils">
+<dt># TODO:</dt>
+<dd>Add support for all chromatic pitches (#4, b6, etc.). Currently only supports modal diatonic pitches.</dd>
+<dt># TODO:</dt>
+<dd>Better handling of minor key Leading Tones. Currently LT are treated as &#8220;non-mode&#8221; tones and left black.</dd>
+<dt># TODO:</dt>
+<dd>Rework analysis.floatingKey module for more modulation-detection precision. Currently uses 4 measure window.</dd>
+<dt># TODO:</dt>
+<dd>Allow the user to bypass analysis and to assert a key to be used for coloring. Score analysis is the default
+option.</dd>
+</dl>
+<dl class="method">
+<dt id="musicColorer.MusicColorer.analyzeKeys">
+<code class="descname">analyzeKeys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#musicColorer.MusicColorer.analyzeKeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Analyzes the score with analysis.floatingKey, which returns a list of key objects with the same length as the
+number of measures found in the piece. If there is NOT a pickup, the end of this list must be padded the end
+with an extra Key object. This is due to a glitch in floatingKey module which causes the last measure of Scores
+without a pickup to be left unanalyzed.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="musicColorer.MusicColorer.destroyOldLogFile">
+<em class="property">static </em><code class="descname">destroyOldLogFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#musicColorer.MusicColorer.destroyOldLogFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the old log-file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="musicColorer.MusicColorer.getMatchingColor">
+<code class="descname">getMatchingColor</code><span class="sig-paren">(</span><em>scaleDegree: int</em><span class="sig-paren">)</span><a class="headerlink" href="#musicColorer.MusicColorer.getMatchingColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks up the color to match a given scale degree referencing colors[]. Returns a hexadecimal representation of
+it. If a note is not diatonic to the key center established by floatingKey, it will not have an integer
+representing its scale degree. In these cases, the note is colored black by default.
+:return: Color</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="musicColorer.MusicColorer.initializeArgs">
+<code class="descname">initializeArgs</code><span class="sig-paren">(</span><em>argv: list</em><span class="sig-paren">)</span><a class="headerlink" href="#musicColorer.MusicColorer.initializeArgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method unpacks argv arguments and either assigns them globally or calls the appropriate methods to process
+or initialize them.
+These are...
+1. argv[0] is the score to edit.
+2. argv[1] is a list of 7 comma-separated supported color representations
+(e.g., &#8216;&#8220;blue&#8221;, &#8220;black&#8221;, &#8220;black&#8221;, &#8220;black&#8221;, &#8220;red&#8221;, &#8220;pink&#8221;,&#8221;black&#8221;&#8217;). These are parsed by processColors into actual
+color objects.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="musicColorer.MusicColorer.logger">
+<em class="property">static </em><code class="descname">logger</code><span class="sig-paren">(</span><em>currentMethod: str</em>, <em>message: str</em><span class="sig-paren">)</span><a class="headerlink" href="#musicColorer.MusicColorer.logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple logger method. Prints &amp; writes formatted strings with the following information:
+Current Working Directory
+Method originating message
+Message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="musicColorer.MusicColorer.padEndKeys">
+<code class="descname">padEndKeys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#musicColorer.MusicColorer.padEndKeys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies the last key in the keys[] list and adds it to the end of keys[].</p>
+<p>For some reason, if there is NOT a pickup in the score, the floatingKey module doesn&#8217;t analyze the last measure.
+Because of this, we have to replicate the last measure it DOES analyze so an error doesn&#8217;t occur when iterating
+through in the run() method.</p>
+<p>Should only be called when the current score does NOT have a pickup in it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="musicColorer.MusicColorer.processColors">
+<code class="descname">processColors</code><span class="sig-paren">(</span><em>colorStringList: list</em><span class="sig-paren">)</span><a class="headerlink" href="#musicColorer.MusicColorer.processColors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accepts a string of comma-separated color names, rgb values, or other representations of colors accepted by the
+Colour package and converts them to a list of Color objects
+:return: list</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="musicColorer.MusicColorer.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#musicColorer.MusicColorer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method steps through the Score&#8217;s structures recursively: Score -&gt; Part -&gt; Measure. At the Measure level, a
+&#8220;currentKey&#8221; is looked up in the list of keys from the analysis step of the initialization. Each note is
+contextualized within this key to give a matching scale degree. Finally, this scale degree is looked up in the
+list of colors and the notehead is colored accordingly. When every note has been colored, the score is returned
+to the caller.
+:return: stream.Score</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-pickupDetector"></span><dl class="class">
+<dt id="pickupDetector.PickupDetector">
+<em class="property">class </em><code class="descclassname">pickupDetector.</code><code class="descname">PickupDetector</code><span class="sig-paren">(</span><em>s: music21.stream.Score</em><span class="sig-paren">)</span><a class="headerlink" href="#pickupDetector.PickupDetector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialized with a stream s. Once initialized, a number of methods are available to give information about pickups
+in the Score and their locations.</p>
+<dl class="docutils">
+<dt># TODO:</dt>
+<dd>Need to add proper exception handling routines.</dd>
+<dt># TODO:</dt>
+<dd>Make sure indicies in &#8220;detectPickups&#8221; work for All cases, and clarify docs.</dd>
+<dt># TODO:</dt>
+<dd>Anacrusis matcher? Find the bar which completes the first part of the anacrusis (usually at end of piece/movt.)</dd>
+</dl>
+<dl class="method">
+<dt id="pickupDetector.PickupDetector.countTotalPickups">
+<code class="descname">countTotalPickups</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pickupDetector.PickupDetector.countTotalPickups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of pickups found by calling the detectPickups method.
+:return: int</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pickupDetector.PickupDetector.detectEndPickup">
+<em class="property">static </em><code class="descname">detectEndPickup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pickupDetector.PickupDetector.detectEndPickup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the last measure has less duration than the key signature, else: False.
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pickupDetector.PickupDetector.detectPickups">
+<code class="descname">detectPickups</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pickupDetector.PickupDetector.detectPickups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks every measure&#8217;s actual contents/length against the barDuration established by its contextual key signature.
+Returns a list of indices corresponding to the measure numbers which contain less duration than the key signature.
+:return: list</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pickupDetector.PickupDetector.hasFrontPickup">
+<em class="property">static </em><code class="descname">hasFrontPickup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pickupDetector.PickupDetector.hasFrontPickup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the first measure has a smaller amount of duration than the key signature, else: False.
+:return: bool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pickupDetector.PickupDetector.hasMeasureZero">
+<code class="descname">hasMeasureZero</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pickupDetector.PickupDetector.hasMeasureZero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the first measure has measure 0. This is a detail of encoding, but if the first measure is
+numbered zero, it should be a pickup.
+:return: bool</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to MusicColorer&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Bronnie C. Stroud.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
